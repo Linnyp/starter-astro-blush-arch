@@ -1,0 +1,112 @@
+/* Global helpers only. Everything else lives in the component that owns it (one BEM block
+   per .astro file). There is no .container class: each block's __inner does
+   max-width: var(--page-max); padding-inline: var(--gutter); margin-inline: auto. */
+
+/* Headings: Nixie One has a single weight, so never let the browser fake bold. */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+/* Decorative handwritten line (§4.2). Render as <p class="script" aria-hidden="true">. */
+.script {
+  font-family: var(--font-script);
+  font-size: 70px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-linen);
+  text-shadow: 1px 1px 2px rgb(0 0 0 / .5);
+  transform: rotate(-10deg);
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (width <= 1100px) { .script { font-size: 50px; } }
+
+/* Links inside running copy. */
+.prose a {
+  color: var(--color-rose-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Framed photo (service cards, §10.5): 5px greige frame, 10px corners. */
+.frame {
+  border: var(--frame);
+  border-radius: var(--radius-frame);
+  overflow: hidden;
+  transition: border-color .6s var(--ease);
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+@media (hover: hover) {
+  a:hover > .frame, .frame:hover { border-color: var(--color-blush); }
+  a:hover > .frame img, .frame:hover img { transform: scale(1.04); }
+}
+
+/* One focus ring for everything interactive. */
+:focus-visible {
+  outline: 2px solid var(--color-rose-text);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Visible placeholder for a business fact the brief doesn't supply. Never replace with
+   invented data; see <Todo />. */
+.todo {
+  display: inline-block;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-btn);
+  background: #fff3cd;
+  color: #7a4d00;
+  font-family: ui-monospace, monospace;
+  font-size: .875em;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: none;
+}
+
+/* Scroll reveal (§12). Add data-reveal to a section/card; scripts/reveal.ts adds .is-in.
+   Set style="--i: n" on siblings to stagger by 80ms. Without JS, content stays visible. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* Arch reveal clips the child, not the observed element: IntersectionObserver counts the
+   target's own clip-path, so a fully clipped target would never intersect. */
+.js [data-reveal='arch'] { opacity: 1; transform: none; }
+.js [data-reveal='arch'] > * { clip-path: inset(100% 0 0 0); transition: clip-path 1s var(--ease); }
+.js [data-reveal='arch'].is-in > * { clip-path: inset(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, :before, :after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .js [data-reveal='arch'] > * { clip-path: none; }
+}

@@ -1,0 +1,74 @@
+/* Blush Arch design tokens. Mirrors §14 of varieties/beauty/blush-arch.md in sitegen;
+   change both together. Pastels are surfaces only, never text (§3.2). */
+:root {
+  interpolate-size: allow-keywords;
+
+  /* Surfaces */
+  --color-white: #ffffff;
+  --color-cream: #fffdf9;
+  --color-linen: #f9f8f5;
+  --color-peach: #ffe4cf;
+  --color-peach-deep: #ffd9bb;
+  --color-blush: #d8b8b5;
+  --color-sage: #c3ccc3;
+  --color-rose: #d9a89e;
+  --color-greige: #beb9b2;
+  --color-sand: #a0886d;
+
+  --surface-hero: rgb(195 204 195 / .75);
+  --surface-sage-soft: rgb(195 204 195 / .5);
+  --surface-blush-soft: rgb(216 184 181 / .5);
+  --surface-split: linear-gradient(90deg, rgb(216 184 181 / .41) 38%, rgb(160 136 109 / .15) 38%);
+  --surface-split-mobile: rgb(216 184 181 / .41);
+
+  /* Text & action */
+  --color-text: #5e5a56;
+  --color-ink: #3f3c39;
+  --color-muted: #7a756f;
+  --color-btn: #5e5a56;
+  --color-rose-text: #9a5b51;
+
+  /* Type */
+  --font-body: var(--font-raleway);
+  --font-display: var(--font-nixie-one);
+  --font-script: var(--font-qwitcher-grypen);
+
+  /* Space */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-56: 56px;
+  --space-80: 80px;
+  --space-104: 104px;
+  --gap-widget: 20px;
+
+  /* Radius */
+  --radius-btn: 3px;
+  --radius-frame: 10px;
+  --radius-tile: 4px;
+  --radius-chip: 999px;
+  --frame: 5px solid var(--color-greige);
+
+  /* Layout */
+  --page-max: 1300px;
+  --page-narrow: 1000px;
+  --gutter: clamp(16px, 4vw, 52px);
+  --section-pad: 104px;
+  --band-pad: 80px;
+  --header-h: 112px;
+
+  /* Motion */
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (width <= 1100px) {
+  :root { --section-pad: 56px; --band-pad: 56px; --header-h: 88px; }
+}
+@media (width <= 767px) {
+  :root { --section-pad: 40px; --band-pad: 40px; }
+}

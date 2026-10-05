@@ -1,0 +1,254 @@
+---
+/**
+ * Starter smoke page: proves tokens, fonts, the arch overhang and base components render.
+ * Claude Code replaces this with the real home page built from .sitegen/brief.json and
+ * .sitegen/style-guide.md. The gradient blocks stand in for client photos.
+ */
+import Base from '../layouts/Base.astro';
+import Arch from '../components/Arch.astro';
+import Button from '../components/Button.astro';
+import BookLink from '../components/BookLink.astro';
+import Todo from '../components/Todo.astro';
+---
+
+<Base title="Blush Arch starter" description="Starter template for the Blush Arch variety.">
+  <main>
+    <section class="demo-hero">
+      <div class="demo-hero__inner">
+        <div class="demo-hero__media">
+          <div class="demo-hero__arch">
+            <Arch><div class="demo__photo"></div></Arch>
+          </div>
+        </div>
+        <div class="demo-hero__content">
+          <p class="script demo-hero__script" aria-hidden="true">Hey &amp; welcome!</p>
+          <h1 class="demo-hero__title">Step inside a space of warmth &amp; calm</h1>
+          <p class="demo-hero__lead">Lead copy is Raleway 18px on 1.4. Address <Todo>suburb</Todo></p>
+          <div class="demo__row">
+            <BookLink at="hero">Book An Appointment</BookLink>
+            <Button href="#" variant="link">Call <Todo>phone</Todo></Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-tiles">
+      <a class="demo-tiles__tile" href="#"><span>View our</span><strong>Team</strong></a>
+      <a class="demo-tiles__tile" href="#"><span>View our</span><strong>Services</strong></a>
+      <a class="demo-tiles__tile" href="#"><span>See our</span><strong>Gallery</strong></a>
+    </section>
+
+    <section class="demo-cards">
+      <h2 class="demo-cards__title">Section title, Nixie One 28px</h2>
+      <div class="demo-cards__grid">
+        {['Colouring', 'Cutting', 'Styling', 'Treatments'].map((name, i) => (
+          <article class="demo-cards__card" data-reveal style={`--i: ${i}`}>
+            <div class="frame demo-cards__frame"><div class="demo__photo"></div></div>
+            <h3 class="demo-cards__name">{name}</h3>
+            <p>Body copy, Raleway 16px. Prices come from the brief only.</p>
+            <BookLink at={`service-${name.toLowerCase()}`} service={name.toLowerCase()} variant="link" quiet>Book</BookLink>
+          </article>
+        ))}
+      </div>
+      <div class="demo__row demo__row--center">
+        <Button variant="outline" href="#">View Full Menu</Button>
+        <Button size="lg">Large Button</Button>
+      </div>
+    </section>
+
+    <section class="demo-split">
+      <div class="demo-split__inner">
+        <div class="demo-split__media">
+          <div class="demo-split__arch">
+            <Arch ratio="2 / 3" reveal><div class="demo__photo demo__photo--warm"></div></Arch>
+          </div>
+        </div>
+        <div class="demo-split__text">
+          <h2 class="demo-split__title">Looking to add length, volume or both?</h2>
+          <p>Feature paragraph on the hard-stop split band. Specialist <Todo>stylist name</Todo></p>
+          <BookLink at="feature" service="extensions" quiet>Book In Now</BookLink>
+        </div>
+      </div>
+    </section>
+
+    <div class="demo-spacer"></div>
+  </main>
+</Base>
+
+<style>
+  .demo__photo {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #e9d7c8, #b9a08a 60%, #7d6a5a);
+  }
+  .demo__photo--warm { background: linear-gradient(170deg, #f1e3d3, #c9a98c 55%, #8a7058); }
+  .demo__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .demo__row--center { justify-content: center; }
+
+  /* Hero: sage band, arch overhangs bottom + right (§10.2) */
+  .demo-hero { background: var(--surface-hero); }
+  .demo-hero__inner {
+    display: flex;
+    max-width: var(--page-max);
+    margin-inline: auto;
+  }
+  .demo-hero__media {
+    position: relative;
+    flex: 0 0 45%;
+    padding-top: 3%;
+    background: linear-gradient(180deg, #e8d3cc, #d8bdb3);
+  }
+  .demo-hero__media::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(255 255 255 / .5);
+  }
+  .demo-hero__arch {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    margin: 0 -12% -12% auto;
+  }
+  .demo-hero__content {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--gap-widget);
+    padding: var(--space-80) var(--gutter) var(--space-80) 8%;
+  }
+  .demo-hero__script {
+    position: absolute;
+    z-index: 3;
+    top: 40px;
+    left: 9px;
+  }
+  .demo-hero__title {
+    max-width: 66%;
+    font-size: 35px;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+  .demo-hero__lead {
+    max-width: 66%;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  /* Tiles (§10.3) */
+  .demo-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-40);
+    max-width: var(--page-narrow);
+    margin: 0 auto;
+    padding: 160px var(--gutter) 0;
+  }
+  .demo-tiles__tile {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-32) var(--space-16);
+    text-align: center;
+    color: var(--color-ink);
+    background: var(--color-peach);
+    transition: background-color .6s ease;
+  }
+  .demo-tiles__tile:nth-child(2) { background: var(--surface-blush-soft); }
+  .demo-tiles__tile:nth-child(3) { background: var(--surface-sage-soft); }
+  .demo-tiles__tile span { font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+  .demo-tiles__tile strong { font-size: 20px; font-weight: 600; text-transform: uppercase; }
+  @media (hover: hover) {
+    .demo-tiles__tile:nth-child(1):hover { background: var(--color-peach-deep); }
+    .demo-tiles__tile:nth-child(2):hover { background: rgb(216 184 181 / .7); }
+    .demo-tiles__tile:nth-child(3):hover { background: rgb(195 204 195 / .7); }
+  }
+
+  /* Framed service cards (§10.5) */
+  .demo-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-40);
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: var(--space-56) var(--gutter) var(--section-pad);
+  }
+  .demo-cards__title { font-size: 28px; text-align: center; text-wrap: balance; }
+  .demo-cards__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-40);
+  }
+  .demo-cards__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+  .demo-cards__frame { height: 300px; }
+  .demo-cards__name { font-size: 18px; text-align: center; }
+  .demo-cards__card :global(.btn--link) { margin-top: auto; }
+
+  /* Split feature with hard-stop gradient (§10.6) */
+  .demo-split { background: var(--surface-split); }
+  .demo-split__inner {
+    display: flex;
+    max-width: var(--page-max);
+    margin-inline: auto;
+  }
+  .demo-split__media { flex: 0 0 40%; padding-top: var(--space-40); }
+  .demo-split__arch {
+    position: relative;
+    z-index: 2;
+    width: 50%;
+    margin: 0 0 -15% auto;
+  }
+  .demo-split__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--gap-widget);
+    max-width: 75%;
+    padding: var(--band-pad) var(--gutter) var(--band-pad) 4%;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .demo-split__title { font-size: 35px; line-height: 1.2; text-transform: uppercase; }
+  .demo-spacer { height: 160px; }
+
+  @media (width <= 1100px) {
+    .demo-hero__script { top: 5px; left: -58px; }
+    .demo-hero__title { max-width: 85%; font-size: 24px; }
+    .demo-hero__lead { max-width: 85%; font-size: 16px; }
+    .demo-tiles { gap: 30px; }
+    .demo-cards__grid { gap: 30px; }
+    .demo-cards__frame { height: 200px; }
+    .demo-split__arch { width: 70%; }
+    .demo-split__title { font-size: 24px; }
+  }
+
+  @media (width <= 767px) {
+    .demo-hero__inner, .demo-split__inner { flex-direction: column; }
+    .demo-hero__media, .demo-split__media { flex-basis: auto; }
+    .demo-hero__arch { width: 62%; margin: 0 6% -10% auto; }
+    .demo-hero__content { align-items: center; padding: 4% 4% 8%; text-align: center; }
+    .demo-hero__script { position: static; }
+    .demo-hero__title, .demo-hero__lead { max-width: 100%; }
+    .demo-hero__title { font-size: 22px; }
+    .demo-tiles { gap: 10px; padding-top: 120px; }
+    .demo-tiles__tile { padding: 6%; }
+    .demo-tiles__tile span { font-size: 12px; }
+    .demo-tiles__tile strong { font-size: 14px; }
+    .demo-cards__grid { grid-template-columns: 1fr 1fr; }
+    .demo-cards__frame { height: 240px; }
+    .demo-split { background: var(--surface-split-mobile); }
+    .demo-split__arch { width: 60%; margin: 0 auto -10%; }
+    .demo-split__text { max-width: 100%; align-items: center; text-align: center; padding: 8% 4%; }
+  }
+</style>

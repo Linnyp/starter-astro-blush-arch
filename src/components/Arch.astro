@@ -1,0 +1,39 @@
+---
+/**
+ * The signature arch (style guide §7): semicircle top, flat bottom. Put an <Image> or
+ * <Picture> in the slot; it's cropped to fill.
+ *
+ *   <Arch ratio="3 / 4" reveal><Image src={hero} alt="…" loading="eager" fetchpriority="high" /></Arch>
+ *
+ * The overhang (arch poking out of the bottom of its band) is set by the section that
+ * places it, with negative margins on its own wrapper. This component only does the shape.
+ */
+interface Props {
+  /** CSS aspect-ratio. 3 / 4 for hero and team, 2 / 3 for the split feature. */
+  ratio?: string;
+  /** Clip-from-bottom reveal on scroll. Leave off for the hero (it's the LCP). */
+  reveal?: boolean;
+  class?: string;
+}
+
+const { ratio = '3 / 4', reveal = false, class: className } = Astro.props;
+---
+
+<div class:list={['arch', className]} style={`--arch-ratio: ${ratio}`} data-reveal={reveal ? 'arch' : undefined}>
+  <slot />
+</div>
+
+<style>
+  .arch {
+    aspect-ratio: var(--arch-ratio);
+    border-radius: 9999px 9999px 0 0;
+    overflow: hidden;
+    background: var(--color-linen);
+  }
+  .arch :global(picture),
+  .arch :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

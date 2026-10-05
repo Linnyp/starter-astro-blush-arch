@@ -1,0 +1,55 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative path to the Open Graph image. */
+  ogImage?: string;
+  lang?: string;
+  /** JSON-LD objects (HairSalon, FAQPage, BreadcrumbList…) emitted in <head>. */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, ogImage, lang = 'en', jsonLd = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = ogImage ? new URL(ogImage, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#c3ccc3" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {og && <meta property="og:image" content={og} />}
+    <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
+
+    <Font cssVariable="--font-raleway" preload />
+    <Font cssVariable="--font-nixie-one" />
+    <Font cssVariable="--font-qwitcher-grypen" />
+
+    <!-- Lets [data-reveal] hide content only when JS is there to reveal it. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/reveal';
+    </script>
+  </body>
+</html>

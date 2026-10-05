@@ -1,0 +1,41 @@
+---
+/**
+ * Every booking CTA goes through this component (style guide §9.3), so the URL and the
+ * tracking live in one place.
+ *
+ *   <BookLink at="hero">Book An Appointment</BookLink>
+ *   <BookLink at="service-colour" service="colour" variant="link">Book</BookLink>
+ *   <BookLink at="stylist-jorja" stylist="jorja" variant="outline">Book with Jorja</BookLink>
+ *
+ * `at` becomes data-book="…" so analytics can tell which CTA produced the booking.
+ * `service` / `stylist` are only appended when site.bookingParams says the provider
+ * supports them. With no site.bookingUrl the link falls back to /contact#book and shows
+ * a visible TODO next to it; pass `quiet` where the badge would break layout (sticky bar).
+ */
+import Button from './Button.astro';
+import Todo from './Todo.astro';
+import { site } from '../data/site';
+
+type ButtonProps = Parameters<typeof Button>[0];
+type Props = Omit<ButtonProps, 'href'> & {
+  /** Where the CTA sits: header, hero, sticky, service-colour, stylist-jorja… */
+  at: string;
+  service?: string;
+  stylist?: string;
+  /** Suppress the TODO badge when bookingUrl is missing. */
+  quiet?: boolean;
+};
+
+const { at, service, stylist, quiet = false, ...rest } = Astro.props;
+
+let href = '/contact#book';
+if (site.bookingUrl) {
+  const url = new URL(site.bookingUrl);
+  const p = site.bookingParams;
+  if (p?.service && service) url.searchParams.set(p.service, service);
+  if (p?.stylist && stylist) url.searchParams.set(p.stylist, stylist);
+  href = url.toString();
+}
+---
+
+<Button href={href} data-book={at} {...rest}><slot /></Button>{!site.bookingUrl && !quiet && <Todo>booking URL</Todo>}
